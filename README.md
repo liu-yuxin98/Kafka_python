@@ -1,6 +1,6 @@
 # steps to use Kafka in windows with python
 
-# download and install kafka from https://kafka.apache.org/downloads
+# Download and install kafka from https://kafka.apache.org/downloads
 
 1. Go to the Apache Kafka website (https://kafka.apache.org/downloads) and download the binary distribution of Kafka.
 2. Extract the downloaded file to a directory of your choice. I extract it to F:\
@@ -42,7 +42,7 @@ bin\windows\kafka-topics.bat --list --bootstrap-server localhost:9092
 
 in you kafka source dir
 
-# download and install zookeeper
+# Download and install zookeeper
 
 1. Go to the Apache ZooKeeper website (https://zookeeper.apache.org/releases.html) and download the binary distribution of ZooKeeper.
 2. Extract the downloaded file to a directory of your choice. For example, you can extract it to C:\zookeeper.
@@ -81,7 +81,7 @@ Alternatively, you can use the following command to check if ZooKeeper is runnin
 bin\zkCli.cmd -server localhost:2181
 ```
 
-# download and install gradle https://gradle.org/install/
+# Download and install gradle https://gradle.org/install/
 
 1. Go to the Gradle website (https://gradle.org/releases/) and download the binary distribution of Gradle.
 2. Extract the downloaded file to a directory of your choice. For example, you can extract it to C:\gradle.
@@ -110,3 +110,66 @@ Build time:   ...
 ```
 
 It means Gradle is installed correctly.
+
+# Download kafka-python in annconda
+
+1.  open anaconda prompt
+2.  choose an enviroment that you want to install kafka-python, for me I choose base enviroment
+
+```
+activate base
+```
+
+3.  type in following:
+
+```
+conda install -c conda-forge kafka-python
+```
+
+# Start to use kafka with python
+
+0. go to F:\kafka-3.4.0-src\config\server.properties and change
+   log.dirs= /tmp/kafka-logs
+   to
+   log.dirs=/kafka-logs
+
+1. Start ZooKeeper by running the following command in a command prompt or terminal window
+   in kafka source file (F:\kafka-3.4.0-src)
+
+```
+bin\windows\zookeeper-server-start.bat config\zookeeper.properties
+```
+
+This will start ZooKeeper on the default port 2181!
+
+2. Open a new command prompt or terminal window and navigate to the Kafka directory. and start Kafka server by running the following command:
+
+```
+bin\windows\kafka-server-start.bat config\server.properties
+```
+
+3. To produce messages to a Kafka topic from Python, you can use the following code:
+
+```python
+from kafka import KafkaProducer
+
+# Create a Kafka producer instance
+producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
+
+# Produce a message to the 'test' topic
+producer.send('test', b'Hello, Kafka!')
+```
+
+4. To consume messages from a Kafka topic in Python, you can use the following code:
+
+````python
+from kafka import KafkaConsumer
+
+# Create a Kafka consumer instance
+consumer = KafkaConsumer('test', bootstrap_servers=['localhost:9092'])
+
+# Consume messages from the 'test' topic
+for message in consumer:
+    print(message)
+    ```
+````
